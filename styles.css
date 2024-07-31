@@ -1,0 +1,48 @@
+/* styles.css */
+
+body {
+    margin: 0;
+    background-color: #000000; /* Set body background color to black */
+}
+
+canvas {
+    display: block;
+}
+
+/* Developer menu styles */
+#devMenu {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    display: none;
+    z-index: 1000;
+}
+
+#devMenu button {
+    background-color: #444;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+#devMenu button:hover {
+    background-color: #666;
+}
+
+#toggleMenu {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1000;
+}
