@@ -1,6 +1,7 @@
-// src/gameConfig.js
+import { MainScene } from "./mainScene.js";
+
 const viewportHeight = window.innerHeight;
-const aspectRatio = 4 / 3;
+const aspectRatio = 1; // Square aspect ratio
 const viewportWidth = viewportHeight * aspectRatio;
 
 // Function to calculate font size based on viewport height
@@ -21,14 +22,16 @@ export const gameConfig = {
       debug: false,
     },
   },
-  scene: {
-    preload: null, // Placeholder
-    create: null, // Placeholder
-    update: null, // Placeholder
-  },
+  scene: MainScene,
   scale: {
     mode: Phaser.Scale.FIT, // Ensure the game scales to fit the viewport
     autoCenter: Phaser.Scale.CENTER_BOTH, // Center the game
   },
   calculateFontSize, // Export the function
 };
+
+// Adjust the game size when the window is resized
+window.addEventListener("resize", () => {
+  gameConfig.width = window.innerHeight * aspectRatio;
+  gameConfig.height = window.innerHeight;
+});

@@ -1,7 +1,7 @@
-// src/gameAssets.js
+// src/gameSssets.js
 export const assets = {
   player: "player.png",
-  background: "asteroid_background.webp", // Updated background image
+  background: "asteroid_background.webp",
   droppod: "droppod.png",
 };
 

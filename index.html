@@ -1,67 +1,14 @@
 <!doctype html>
-<html>
+<html lang="en">
     <head>
-        <title>Automace Prototype</title>
-        <script src="libs/phaser/phaser.js"></script>
-        <script type="module">
-            import { config } from "./src/game.js";
-
-            let game = null;
-
-            window.addEventListener("load", () => {
-                initializeGame();
-
-                // Toggle developer menu visibility with "M" key
-                document.addEventListener("keydown", (event) => {
-                    if (event.key === "m" || event.key === "M") {
-                        const devMenu = document.getElementById("devMenu");
-                        devMenu.style.display =
-                            devMenu.style.display === "block"
-                                ? "none"
-                                : "block";
-                    }
-                });
-
-                // Handle restart game button
-                document
-                    .getElementById("restartGame")
-                    .addEventListener("click", () => {
-                        window.dispatchEvent(new CustomEvent("game:restart"));
-                    });
-
-                // Handle speed buttons
-                document
-                    .getElementById("decreaseSpeed")
-                    .addEventListener("click", () => {
-                        window.dispatchEvent(
-                            new CustomEvent("game:speedChange", {
-                                detail: -10,
-                            }),
-                        );
-                    });
-
-                document
-                    .getElementById("increaseSpeed")
-                    .addEventListener("click", () => {
-                        window.dispatchEvent(
-                            new CustomEvent("game:speedChange", { detail: 10 }),
-                        );
-                    });
-            });
-
-            function initializeGame() {
-                game = new Phaser.Game(config);
-            }
-        </script>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Phaser Game</title>
         <link rel="stylesheet" href="styles.css" />
+        <script src="libs/phaser/phaser.js"></script>
+        <script type="module" src="src/game.js" defer></script>
     </head>
     <body>
-        <div id="devMenu">
-            <button id="restartGame">Restart Game</button>
-            <div>
-                <button id="decreaseSpeed">Decrease Speed</button>
-                <button id="increaseSpeed">Increase Speed</button>
-            </div>
-        </div>
+        <div id="game-container"></div>
     </body>
 </html>
