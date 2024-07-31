@@ -1,5 +1,5 @@
-// src/player.js
 import { PlayerUI } from "./playerUI.js";
+import { Shadow } from "./shadow.js";
 
 export class Player {
   constructor(scene) {
@@ -11,11 +11,6 @@ export class Player {
     this.speed = 5;
     this.spriteWidth = 64;
     this.spriteHeight = 64;
-
-    // Shadow properties
-    this.shadowOffsetX = 5;
-    this.shadowOffsetY = -5;
-    this.shadowAlpha = 0.5; // Shadow transparency
 
     // Power property
     this.power = 100; // Initial power level
@@ -33,15 +28,7 @@ export class Player {
 
   create(x, y) {
     // Create shadow sprite
-    this.shadow = this.scene.add.sprite(
-      x + this.shadowOffsetX,
-      y + this.shadowOffsetY,
-      "player",
-    );
-    this.shadow.setOrigin(0.5, 0.5);
-    this.shadow.setDisplaySize(this.spriteWidth, this.spriteHeight);
-    this.shadow.setTint(0x000000);
-    this.shadow.setAlpha(this.shadowAlpha);
+    this.shadow = new Shadow(this.scene, x, y, "player");
 
     // Create player sprite
     this.sprite = this.scene.add.sprite(x, y, "player");
@@ -69,43 +56,41 @@ export class Player {
   handleMovement() {
     if (this.cursors.left.isDown) {
       this.sprite.x -= this.speed;
-      this.shadow.x -= this.speed;
     } else if (this.cursors.right.isDown) {
       this.sprite.x += this.speed;
-      this.shadow.x += this.speed;
     }
 
     if (this.cursors.up.isDown) {
       this.sprite.y -= this.speed;
-      this.shadow.y -= this.speed;
     } else if (this.cursors.down.isDown) {
       this.sprite.y += this.speed;
-      this.shadow.y += this.speed;
     }
+
+    // Update shadow position
+    this.shadow.updatePosition(this.sprite.x, this.sprite.y);
   }
 
   wrapAroundScreenEdges() {
     if (this.sprite.x < -this.spriteWidth / 2) {
       this.sprite.x = this.scene.cameras.main.width + this.spriteWidth / 2;
-      this.shadow.x = this.sprite.x + this.shadowOffsetX;
     } else if (
       this.sprite.x >
       this.scene.cameras.main.width + this.spriteWidth / 2
     ) {
       this.sprite.x = -this.spriteWidth / 2;
-      this.shadow.x = this.sprite.x + this.shadowOffsetX;
     }
 
     if (this.sprite.y < -this.spriteHeight / 2) {
       this.sprite.y = this.scene.cameras.main.height + this.spriteHeight / 2;
-      this.shadow.y = this.sprite.y + this.shadowOffsetY;
     } else if (
       this.sprite.y >
       this.scene.cameras.main.height + this.spriteHeight / 2
     ) {
       this.sprite.y = -this.spriteHeight / 2;
-      this.shadow.y = this.sprite.y + this.shadowOffsetY;
     }
+
+    // Update shadow position
+    this.shadow.updatePosition(this.sprite.x, this.sprite.y);
   }
 
   checkDistanceToDroppod(droppod) {
