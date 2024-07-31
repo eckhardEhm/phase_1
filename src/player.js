@@ -19,7 +19,7 @@ export class Player {
 
     // Power property
     this.power = 100; // Initial power level
-    this.powerDrainRate = 0.1; // Rate at which power drains per update tick
+    this.powerDrainRate = 0.3; // Rate at which power drains per update tick
     this.powerChargeRate = 0.667; // Rate at which power recharges per update tick
     this.droppodRechargeRadius = 20;
 
