@@ -53,7 +53,7 @@ export class MainScene extends Phaser.Scene {
   update() {
     // Update player and droppod
     if (this.player) {
-      this.player.update();
+      this.player.update(this.droppod);
     }
     if (this.droppod) {
       this.droppod.update();

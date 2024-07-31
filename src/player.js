@@ -19,7 +19,9 @@ export class Player {
 
     // Power property
     this.power = 100; // Initial power level
-    this.powerDrainRate = 1.1; // Rate at which power drains per update tick
+    this.powerDrainRate = 0.1; // Rate at which power drains per update tick
+    this.powerChargeRate = 0.667; // Rate at which power recharges per update tick
+    this.droppodRechargeRadius = 20;
 
     // Create UI instance
     this.ui = new PlayerUI(scene);
@@ -56,7 +58,15 @@ export class Player {
   }
 
   update(droppod) {
-    // Handle movement
+    this.handleMovement();
+    this.wrapAroundScreenEdges();
+    this.checkDistanceToDroppod(droppod);
+
+    // Update UI with current data
+    this.ui.update(this.sprite.x, this.sprite.y, this.speed, this.power);
+  }
+
+  handleMovement() {
     if (this.cursors.left.isDown) {
       this.sprite.x -= this.speed;
       this.shadow.x -= this.speed;
@@ -72,8 +82,9 @@ export class Player {
       this.sprite.y += this.speed;
       this.shadow.y += this.speed;
     }
+  }
 
-    // Wrap around screen edges
+  wrapAroundScreenEdges() {
     if (this.sprite.x < -this.spriteWidth / 2) {
       this.sprite.x = this.scene.cameras.main.width + this.spriteWidth / 2;
       this.shadow.x = this.sprite.x + this.shadowOffsetX;
@@ -95,8 +106,9 @@ export class Player {
       this.sprite.y = -this.spriteHeight / 2;
       this.shadow.y = this.sprite.y + this.shadowOffsetY;
     }
+  }
 
-    // Check distance to droppod and update power
+  checkDistanceToDroppod(droppod) {
     if (droppod) {
       const distance = Phaser.Math.Distance.Between(
         this.sprite.x,
@@ -104,14 +116,15 @@ export class Player {
         droppod.sprite.x,
         droppod.sprite.y,
       );
-      if (distance > 200) {
-        // Example threshold for proximity
+      if (distance > this.droppodRechargeRadius) {
+        // Outside the recharge radius: Drain power
         this.power -= this.powerDrainRate;
         this.power = Math.max(this.power, 0); // Ensure power does not go below 0
+      } else {
+        // Inside the recharge radius: Recharge power
+        this.power += this.powerChargeRate;
+        this.power = Math.min(this.power, 100); // Ensure power does not exceed 100
       }
     }
-
-    // Update UI with current data
-    this.ui.update(this.sprite.x, this.sprite.y, this.speed, this.power);
   }
 }

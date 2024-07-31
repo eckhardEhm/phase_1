@@ -3,7 +3,7 @@ export class PlayerUI {
   constructor(scene) {
     this.scene = scene;
     this.text = null;
-    this.powerBar = null; // Rectangle for power bar
+    this.powerText = null; // Text for displaying power
     this.x = 0;
     this.y = 0;
     this.speed = 0;
@@ -16,14 +16,20 @@ export class PlayerUI {
       .text(
         this.scene.cameras.main.width - 10,
         10,
-        `X: ${this.x} Y: ${this.y} Speed: ${this.speed}`,
+        `X: ${this.x} Y: ${this.y} Speed: ${this.speed} Power: ${this.power}`,
         { fontSize: "16px", fill: "#fff" },
       )
       .setOrigin(1, 0);
 
-    // Create the power bar rectangle
-    this.powerBar = this.scene.add.graphics();
-    this.updatePowerBar(this.power);
+    // Create a text object to display power separately
+    this.powerText = this.scene.add
+      .text(
+        this.scene.cameras.main.width - 10,
+        30, // Position below the main stats
+        `Power: ${this.power}`,
+        { fontSize: "16px", fill: "#fff" },
+      )
+      .setOrigin(1, 0);
   }
 
   update(x, y, speed, power) {
@@ -39,32 +45,16 @@ export class PlayerUI {
       );
     }
 
-    if (this.powerBar) {
-      this.updatePowerBar(this.power);
+    if (this.powerText) {
+      this.powerText.setText(`Power: ${Math.round(this.power)}`);
+      // Update color based on power level
+      if (power > 40) {
+        this.powerText.setFill("#0f0"); // Green
+      } else if (power > 10) {
+        this.powerText.setFill("#ff0"); // Yellow
+      } else {
+        this.powerText.setFill("#f00"); // Red
+      }
     }
-  }
-
-  updatePowerBar(power) {
-    // Clear previous power bar
-    this.powerBar.clear();
-
-    // Calculate the color based on power level
-    let color;
-    if (power > 40) {
-      color = 0x00ff00; // Green
-    } else if (power > 10) {
-      color = 0xffff00; // Yellow
-    } else {
-      color = 0xff0000; // Red
-    }
-
-    // Draw the power bar
-    this.powerBar.fillStyle(color);
-    this.powerBar.fillRect(
-      this.scene.cameras.main.width - 110, // x position
-      10, // y position
-      100 * (power / 100), // width based on power level
-      20, // height
-    );
   }
 }

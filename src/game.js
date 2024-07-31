@@ -23,3 +23,6 @@ window.addEventListener("resize", () => {
 
   game.scale.resize(width, height);
 });
+
+// Expose the game instance to the console
+window.game = game;
