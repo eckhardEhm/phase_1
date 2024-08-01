@@ -17,7 +17,7 @@ export class Player {
     this.ui = new PlayerUI(scene);
 
     // Initialize Battery
-    this.battery = new Battery(100, 100, 0.667); // Initial power level, max capacity, recharge rate
+    this.battery = new Battery(this, 100, 100, 0.667); // Initial power level, max capacity, recharge rate
 
     // Drain rate and whether player is active
     this.drainRate = 0.3; // Amount of power drained per update
@@ -50,16 +50,18 @@ export class Player {
     wrapAroundScreenEdges(this);
 
     // Update activity status
-    this.isActive =
+    this.isMoving =
       this.cursors.left.isDown ||
       this.cursors.right.isDown ||
       this.cursors.up.isDown ||
       this.cursors.down.isDown;
 
     // Drain power if active
-    if (this.isActive) {
+    if (this.isMoving) {
       this.battery.power -= this.drainRate;
       this.battery.power = Math.max(this.battery.power, 0); // Ensure power does not go below 0
+    } else {
+      this.battery.power -= this.drainRate / 10;
     }
 
     this.battery.update(); // Handle power management

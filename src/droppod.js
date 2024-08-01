@@ -14,8 +14,7 @@ export class Droppod {
     this.ui = new DroppodUI(scene);
 
     // Initialize the battery with initial power, max capacity, and max recharge rate
-    this.battery = new Battery(50, 1000, 5); // 50 initial power, 1000 max power, 5 max recharge rate
-
+    this.battery = new Battery(this, 50, 1000, 5); // 50 initial power, 1000 max power, 5 max recharge rate
     // Assuming you have a mechanism to set a charging source if needed
     // this.battery.setChargingSource(someSource);
   }

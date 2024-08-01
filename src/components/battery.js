@@ -1,27 +1,45 @@
-// src/components/Battery
+// src/components/Battery.js
+
 export class Battery {
-  constructor(initialPower, maxPower, rechargeRate, generatePowerRate = 0) {
+  constructor(
+    gameObject,
+    initialPower = 100,
+    maxPower = 250,
+    maxRechargeRate = 5,
+    maxDrainRate = 10,
+    powerRange = 25,
+    generatePowerRate = 0,
+  ) {
+    this.OwnerGameObject = gameObject; // Reference to the owning game object
     this.power = initialPower;
     this.maxPower = maxPower;
-    this.rechargeRate = rechargeRate;
+    this.maxRechargeRate = maxRechargeRate;
+    this.maxDrainRate = maxDrainRate;
     this.generatePowerRate = generatePowerRate;
-    this.isCharging = true;
+    this.drainRate = 0; // Current drain rate
+    this.chargeRate = 0; // Current charge rate
+    this.powerRange = powerRange;
   }
 
   update() {
-    if (this.isCharging) {
-      // Recharge or generate power
-      this.power += this.generatePowerRate || this.rechargeRate;
-      this.power = Math.min(this.power, this.maxPower); // Cap the power to the max capacity
+    this.rechargeSelf(); // Manage recharging and draining
+    // Optionally update the battery UI if needed
+    if (this.OwnerGameObject && this.OwnerGameObject.batteryUI) {
+      this.OwnerGameObject.batteryUI.update(); // Ensure the battery UI is updated
     }
-    this.power = Math.max(this.power, 0); // Ensure power does not go below 0
   }
 
-  startCharging() {
-    this.isCharging = true;
+  rechargeSelf() {
+    // Recharge power
+    this.power += this.generatePowerRate;
+    this.power = Math.min(this.power, this.maxPower); // Cap the power to the max capacity
   }
 
-  stopCharging() {
-    this.isCharging = false;
+  draw(rate) {
+    this.drainRate = Math.min(rate, this.maxDrainRate); // Cap the drain rate
+  }
+
+  charge(rate) {
+    this.chargeRate = Math.min(rate, this.maxRechargeRate); // Cap the charge rate
   }
 }

@@ -1,3 +1,4 @@
+// src/ui/BatteryUI
 export class BatteryUI {
   constructor(scene) {
     this.scene = scene;
