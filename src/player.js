@@ -1,5 +1,6 @@
 import { PlayerUI } from "./playerUI.js";
 import { handleMovement, wrapAroundScreenEdges } from "./playerMovement.js";
+import { Battery } from "./battery.js"; // Ensure you import Battery
 
 export class Player {
   constructor(scene) {
@@ -12,14 +13,15 @@ export class Player {
     this.spriteWidth = 64;
     this.spriteHeight = 64;
 
-    // Power property
-    this.power = 100; // Initial power level
-    this.powerDrainRate = 0.3; // Rate at which power drains per update tick
-    this.powerChargeRate = 0.667; // Rate at which power recharges per update tick
-    this.droppodRechargeRadius = 32;
-
     // Create UI instance
     this.ui = new PlayerUI(scene);
+
+    // Initialize Battery
+    this.battery = new Battery(100, 100, 0.667); // Initial power level, max capacity, recharge rate
+
+    // Drain rate and whether player is active
+    this.drainRate = 0.3; // Amount of power drained per update
+    this.isActive = false; // Track whether player is active
   }
 
   preload() {
@@ -36,51 +38,50 @@ export class Player {
     this.glowFx = this.sprite.preFX.addGlow();
 
     this.createControls();
-    this.ui.create();
+    this.ui.create(this);
   }
 
   createControls() {
     this.cursors = this.scene.input.keyboard.createCursorKeys();
   }
 
-  update(droppod) {
+  update() {
     handleMovement(this);
     wrapAroundScreenEdges(this);
-    this.checkDistanceToDroppod(droppod);
-    this.updateGlow(droppod);
+
+    // Update activity status
+    this.isActive =
+      this.cursors.left.isDown ||
+      this.cursors.right.isDown ||
+      this.cursors.up.isDown ||
+      this.cursors.down.isDown;
+
+    // Drain power if active
+    if (this.isActive) {
+      this.battery.power -= this.drainRate;
+      this.battery.power = Math.max(this.battery.power, 0); // Ensure power does not go below 0
+    }
+
+    this.battery.update(); // Handle power management
 
     // Update UI with current data
-    this.ui.update(this.sprite.x, this.sprite.y, this.speed, this.power);
-  }
-
-  checkDistanceToDroppod(droppod) {
-    if (droppod) {
-      const distance = Phaser.Math.Distance.Between(
-        this.sprite.x,
-        this.sprite.y,
-        droppod.sprite.x,
-        droppod.sprite.y,
-      );
-      if (distance > this.droppodRechargeRadius) {
-        // Outside the recharge radius: Drain power
-        this.power -= this.powerDrainRate;
-        this.power = Math.max(this.power, 0); // Ensure power does not go below 0
-      } else {
-        // Inside the recharge radius: Recharge power
-        this.power += this.powerChargeRate;
-        this.power = Math.min(this.power, 100); // Ensure power does not exceed 100
-      }
-    }
+    this.ui.update(
+      this.sprite.x,
+      this.sprite.y,
+      this.speed,
+      this.battery.power,
+    );
+    this.updateGlow();
   }
 
   updateGlow() {
     let glowColor = 0xccccff; // Default white color
 
-    if (this.power < 25) {
+    if (this.battery.power < 25) {
       glowColor = 0xcc6666; // Red when power is very low
-    } else if (this.power > 25 && this.power < 50) {
+    } else if (this.battery.power > 25 && this.battery.power < 50) {
       glowColor = 0xdddd33; // Yellow when power is below 50%
-    } else if (this.power > 50) {
+    } else if (this.battery.power > 50) {
       glowColor = 0xccccff; // default glow
     }
     this.glowFx.color = glowColor;

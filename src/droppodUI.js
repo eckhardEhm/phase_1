@@ -1,27 +1,23 @@
+import { BatteryUI } from "./batteryUI.js"; // Import the BatteryUI class
+
 export class DroppodUI {
   constructor(scene) {
     this.scene = scene;
-    this.text = null;
+    this.batteryUI = null;
+    this.droppod = null;
   }
 
   create(droppod) {
-    // Position the text below the droppod sprite
-    this.text = this.scene.add
-      .text(
-        droppod.sprite.x,
-        droppod.sprite.y + droppod.sprite.displayHeight / 2 + 10, // Positioned below the sprite
-        `Power: ${droppod.battery.power.toFixed(0)}`, // Display the current power level
-        { fontSize: "16px", fill: "#fff" },
-      )
-      .setOrigin(0.5, 0);
+    this.droppod = droppod; // Store reference to the droppod
+
+    // Initialize BatteryUI with the droppod instance
+    this.batteryUI = new BatteryUI(this.scene);
+    this.batteryUI.create(this.droppod);
   }
 
   update() {
-    if (this.text) {
-      // Update the power display with the current power level
-      this.text.setText(
-        `Power: ${this.scene.droppod.battery.power.toFixed(0)}`,
-      );
+    if (this.batteryUI) {
+      this.batteryUI.update(); // Update the BatteryUI with the current battery power
     }
   }
 }

@@ -1,5 +1,5 @@
 import { DroppodUI } from "./droppodUI.js";
-import { Battery } from "./battery.js"; // Assuming this is where the Battery class is located
+import { Battery } from "./battery.js"; // Ensure this is the correct path
 
 // Define droppod sprite size
 const DROPPOD_WIDTH = 96;
@@ -13,8 +13,11 @@ export class Droppod {
     this.y = y;
     this.ui = new DroppodUI(scene);
 
-    // Initialize the battery with a capacity of 1000
-    this.battery = new Battery(1000);
+    // Initialize the battery with initial power, max capacity, and max recharge rate
+    this.battery = new Battery(50, 1000, 5); // 50 initial power, 1000 max power, 5 max recharge rate
+
+    // Assuming you have a mechanism to set a charging source if needed
+    // this.battery.setChargingSource(someSource);
   }
 
   preload() {
@@ -32,7 +35,7 @@ export class Droppod {
   }
 
   update() {
-    // Update the DroppodUI with the current battery power
-    this.ui.update(this);
+    this.battery.update(); // Update the battery power
+    this.ui.update(this.battery.power); // Update the DroppodUI with the current battery power
   }
 }
