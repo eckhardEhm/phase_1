@@ -1,6 +1,6 @@
 import { PlayerUI } from "./ui/playerUI.js";
 import { handleMovement, wrapAroundScreenEdges } from "./playerMovement.js";
-import { Battery } from "./battery.js"; // Ensure you import Battery
+import { Battery } from "./components/battery.js"; // Ensure you import Battery
 
 export class Player {
   constructor(scene) {

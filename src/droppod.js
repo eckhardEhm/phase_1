@@ -1,5 +1,5 @@
 import { DroppodUI } from "./ui/droppodUI.js";
-import { Battery } from "./battery.js"; // Ensure this is the correct path
+import { Battery } from "./components/battery.js"; // Ensure this is the correct path
 
 // Define droppod sprite size
 const DROPPOD_WIDTH = 96;
