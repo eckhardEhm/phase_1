@@ -1,5 +1,5 @@
-import { Player } from "./player.js";
-import { Droppod } from "./droppod.js";
+import { Player } from "./actors/player.js";
+import { Droppod } from "./actors/droppod.js";
 import { preloadAssets } from "./gameAssets.js";
 
 // Define the offset range for the droppod

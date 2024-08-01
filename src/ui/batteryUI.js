@@ -1,40 +1,33 @@
-// src/ui/BatteryUI
 export class BatteryUI {
-  constructor(scene) {
-    this.scene = scene;
+  constructor(OwnerBattery, ActorSprite) {
+    this.actorSprite = ActorSprite;
     this.text = null;
-    this.object = null; // Store reference to the object with the battery
-  }
+    this.Battery = null; // Store reference to the battery
 
-  create(object) {
-    if (!object || !object.sprite) {
-      console.error("Invalid object or object does not have a sprite.");
-      return;
-    }
-
-    this.object = object; // Store reference to the object
+    this.Battery = OwnerBattery; // Store reference to the battery
     const offsetY = 20; // Adjust as needed
 
-    // Create text object for the battery power display below the object
-    this.text = this.scene.add
+    if (this.actorSprite == null) return;
+    // Create text object for the battery power display below the battery's sprite
+    this.text = this.actorSprite.scene.add
       .text(
-        this.object.sprite.x, // Align text with object's sprite x position
-        this.object.sprite.y + this.object.sprite.displayHeight / 2 + offsetY, // Position below the object's sprite
-        `Power: ${Math.round(this.object.battery.power)}`, // Display the power level
+        this.actorSprite.x, // Align text with battery's sprite x position
+        this.actorSprite.y + this.actorSprite.displayHeight / 2 + offsetY, // Position below the battery's sprite
+        `Power: ${Math.round(this.Battery.power)}`, // Display the power level
         { fontSize: "16px", fill: "#fff" },
       )
       .setOrigin(0.5, 0); // Center text horizontally
   }
 
   update() {
-    if (this.object && this.text) {
+    if (this.Battery && this.text) {
       // Update the text to show the current battery power
-      this.text.setText(`Power: ${Math.round(this.object.battery.power)}`);
+      this.text.setText(`Power: ${Math.round(this.Battery.power)}`);
 
-      // Update the position of the text to follow the object
+      // Update the position of the text to follow the battery's sprite
       this.text.setPosition(
-        this.object.sprite.x,
-        this.object.sprite.y + this.object.sprite.displayHeight / 2 + 20,
+        this.actorSprite.x,
+        this.actorSprite.y + this.actorSprite.displayHeight / 2 + 20,
       );
     }
   }

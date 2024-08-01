@@ -1,8 +1,11 @@
 // src/components/Battery.js
 
-export class Battery {
+import { Component } from "./Component.js"; // Ensure the path is correct
+import { BatteryUI } from "../ui/BatteryUI.js"; // Correctly import BatteryUI
+
+export class Battery extends Component {
   constructor(
-    gameObject,
+    actor,
     initialPower = 100,
     maxPower = 250,
     maxRechargeRate = 5,
@@ -10,7 +13,7 @@ export class Battery {
     powerRange = 25,
     generatePowerRate = 0,
   ) {
-    this.OwnerGameObject = gameObject; // Reference to the owning game object
+    super(actor); // Initialize the base Component class
     this.power = initialPower;
     this.maxPower = maxPower;
     this.maxRechargeRate = maxRechargeRate;
@@ -19,13 +22,20 @@ export class Battery {
     this.drainRate = 0; // Current drain rate
     this.chargeRate = 0; // Current charge rate
     this.powerRange = powerRange;
+
+    // Initialize BatteryUI
+    this.batteryUI = new BatteryUI(this, actor.sprite);
+
+    console.log("battery created for " + actor.name);
+    console.log("battery has owner sprite " + actor["sprite"]);
   }
 
   update() {
     this.rechargeSelf(); // Manage recharging and draining
-    // Optionally update the battery UI if needed
-    if (this.OwnerGameObject && this.OwnerGameObject.batteryUI) {
-      this.OwnerGameObject.batteryUI.update(); // Ensure the battery UI is updated
+
+    // Update the battery UI if needed
+    if (this.batteryUI) {
+      this.batteryUI.update();
     }
   }
 
