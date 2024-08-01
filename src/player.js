@@ -1,4 +1,4 @@
-import { PlayerUI } from "./playerUI.js";
+import { PlayerUI } from "./ui/playerUI.js";
 import { handleMovement, wrapAroundScreenEdges } from "./playerMovement.js";
 import { Battery } from "./battery.js"; // Ensure you import Battery
 

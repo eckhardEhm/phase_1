@@ -1,4 +1,4 @@
-import { DroppodUI } from "./droppodUI.js";
+import { DroppodUI } from "./ui/droppodUI.js";
 import { Battery } from "./battery.js"; // Ensure this is the correct path
 
 // Define droppod sprite size
