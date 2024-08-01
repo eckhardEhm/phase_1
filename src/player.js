@@ -1,11 +1,11 @@
 import { PlayerUI } from "./playerUI.js";
-import { Shadow } from "./shadow.js";
+import { handleMovement, wrapAroundScreenEdges } from "./playerMovement.js";
 
 export class Player {
   constructor(scene) {
     this.scene = scene;
     this.sprite = null;
-    this.shadow = null;
+    this.glowFx = null;
 
     // Configurable variables
     this.speed = 5;
@@ -16,7 +16,7 @@ export class Player {
     this.power = 100; // Initial power level
     this.powerDrainRate = 0.3; // Rate at which power drains per update tick
     this.powerChargeRate = 0.667; // Rate at which power recharges per update tick
-    this.droppodRechargeRadius = 20;
+    this.droppodRechargeRadius = 32;
 
     // Create UI instance
     this.ui = new PlayerUI(scene);
@@ -27,14 +27,13 @@ export class Player {
   }
 
   create(x, y) {
-    // Create shadow sprite
-    this.shadow = new Shadow(this.scene, x, y, "player");
-
     // Create player sprite
     this.sprite = this.scene.add.sprite(x, y, "player");
     this.sprite.setOrigin(0.5, 0.5);
     this.sprite.setDepth(1);
     this.sprite.setDisplaySize(this.spriteWidth, this.spriteHeight);
+
+    this.glowFx = this.sprite.preFX.addGlow();
 
     this.createControls();
     this.ui.create();
@@ -45,52 +44,13 @@ export class Player {
   }
 
   update(droppod) {
-    this.handleMovement();
-    this.wrapAroundScreenEdges();
+    handleMovement(this);
+    wrapAroundScreenEdges(this);
     this.checkDistanceToDroppod(droppod);
+    this.updateGlow(droppod);
 
     // Update UI with current data
     this.ui.update(this.sprite.x, this.sprite.y, this.speed, this.power);
-  }
-
-  handleMovement() {
-    if (this.cursors.left.isDown) {
-      this.sprite.x -= this.speed;
-    } else if (this.cursors.right.isDown) {
-      this.sprite.x += this.speed;
-    }
-
-    if (this.cursors.up.isDown) {
-      this.sprite.y -= this.speed;
-    } else if (this.cursors.down.isDown) {
-      this.sprite.y += this.speed;
-    }
-
-    // Update shadow position
-    this.shadow.updatePosition(this.sprite.x, this.sprite.y);
-  }
-
-  wrapAroundScreenEdges() {
-    if (this.sprite.x < -this.spriteWidth / 2) {
-      this.sprite.x = this.scene.cameras.main.width + this.spriteWidth / 2;
-    } else if (
-      this.sprite.x >
-      this.scene.cameras.main.width + this.spriteWidth / 2
-    ) {
-      this.sprite.x = -this.spriteWidth / 2;
-    }
-
-    if (this.sprite.y < -this.spriteHeight / 2) {
-      this.sprite.y = this.scene.cameras.main.height + this.spriteHeight / 2;
-    } else if (
-      this.sprite.y >
-      this.scene.cameras.main.height + this.spriteHeight / 2
-    ) {
-      this.sprite.y = -this.spriteHeight / 2;
-    }
-
-    // Update shadow position
-    this.shadow.updatePosition(this.sprite.x, this.sprite.y);
   }
 
   checkDistanceToDroppod(droppod) {
@@ -111,5 +71,18 @@ export class Player {
         this.power = Math.min(this.power, 100); // Ensure power does not exceed 100
       }
     }
+  }
+
+  updateGlow() {
+    let glowColor = 0xccccff; // Default white color
+
+    if (this.power < 25) {
+      glowColor = 0xcc6666; // Red when power is very low
+    } else if (this.power > 25 && this.power < 50) {
+      glowColor = 0xdddd33; // Yellow when power is below 50%
+    } else if (this.power > 50) {
+      glowColor = 0xccccff; // default glow
+    }
+    this.glowFx.color = glowColor;
   }
 }

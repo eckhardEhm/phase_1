@@ -11,6 +11,13 @@ const config = {
     autoCenter: Phaser.Scale.Center.CENTER_BOTH, // Center the game
   },
   parent: "game-container", // Set the container for Phaser's game
+  backgroundColor: "#2d2d2d",
+  fx: {
+    glow: {
+      distance: 32,
+      quality: 0.1,
+    },
+  },
 };
 
 // Initialize the game
