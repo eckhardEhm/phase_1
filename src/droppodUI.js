@@ -2,24 +2,26 @@ export class DroppodUI {
   constructor(scene) {
     this.scene = scene;
     this.text = null;
-    this.distance = 0;
   }
 
-  create() {
+  create(droppod) {
+    // Position the text below the droppod sprite
     this.text = this.scene.add
       .text(
-        this.scene.cameras.main.width - 10,
-        50, // Adjust as needed for spacing
-        `Droppod Distance: ${Math.round(this.distance)}`,
+        droppod.sprite.x,
+        droppod.sprite.y + droppod.sprite.displayHeight / 2 + 10, // Positioned below the sprite
+        `Power: ${droppod.battery.power.toFixed(0)}`, // Display the current power level
         { fontSize: "16px", fill: "#fff" },
       )
-      .setOrigin(1, 0);
+      .setOrigin(0.5, 0);
   }
 
-  update(distance) {
-    this.distance = distance;
+  update() {
     if (this.text) {
-      this.text.setText(`Droppod Distance: ${Math.round(this.distance)}`);
+      // Update the power display with the current power level
+      this.text.setText(
+        `Power: ${this.scene.droppod.battery.power.toFixed(0)}`,
+      );
     }
   }
 }
