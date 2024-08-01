@@ -22,7 +22,7 @@ export class BatteryUI {
   update() {
     if (this.Battery && this.text) {
       // Update the text to show the current battery power
-      this.text.setText(`Power: ${Math.round(this.Battery.power)}`);
+      this.text.setText(`Pwr: ${Math.round(this.Battery.power)}`);
 
       // Update the position of the text to follow the battery's sprite
       this.text.setPosition(

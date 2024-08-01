@@ -23,7 +23,15 @@ export class Droppod {
     this.sprite.setOrigin(0.5, 0.5);
     this.sprite.setDisplaySize(DROPPOD_WIDTH, DROPPOD_HEIGHT); // Set the size
     this.sprite.setDepth(0);
-    this.battery = new Battery(this, 50, 1000, 5); // 50 initial power, 1000 max power, 5 max recharge rate
+    this.battery = new Battery(this, 50, 1000, 5, 10, 25, 1);
+    /*
+actor,
+initialPower = 100,
+maxPower = 250,
+maxRechargeRate = 5,
+maxDrainRate = 10,
+powerRange = 25,
+generatePowerRate = 0,*/
   }
 
   update() {

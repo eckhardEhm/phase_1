@@ -27,7 +27,7 @@ export class Battery extends Component {
     this.batteryUI = new BatteryUI(this, actor.sprite);
 
     console.log("battery created for " + actor.name);
-    console.log("battery has owner sprite " + actor["sprite"]);
+    //console.log("battery has owner sprite " + actor["sprite"]);
   }
 
   update() {
