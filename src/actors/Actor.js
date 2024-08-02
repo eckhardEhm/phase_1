@@ -1,4 +1,4 @@
-// src/actor.js
+// src/actors/actor.js
 
 export class Actor {
   constructor(name = "_unnamed_") {

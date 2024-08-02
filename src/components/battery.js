@@ -72,18 +72,17 @@ export class Battery extends Component {
     const components = [];
     const actorManager = this.actor.scene.actorManager; // Access the ActorManager instance
 
+    /* //commented because broken
+
     // Iterate through all actors in the ActorManager
     for (const name in actorManager.actors) {
       const actor = actorManager.actors[name];
-      if (actor instanceof Phaser.GameObjects.Sprite) {
-        // Ensure it's a sprite
-        const batteryComponent = actor.getComponent(Battery);
-        if (batteryComponent instanceof Battery) {
-          components.push(batteryComponent);
-        }
+      const batteryComponent = actor.getComponent(Battery);
+      if (batteryComponent instanceof Battery) {
+        components.push(batteryComponent);
       }
     }
-
+ */
     return components;
   }
 

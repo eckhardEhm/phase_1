@@ -1,5 +1,9 @@
 // src/actors/droppod.js
 import { Battery } from "../components/Battery.js"; // Ensure this is the correct path
+// import actor and extend it
+/*
+
+*/
 
 // Define droppod sprite size
 const DROPPOD_WIDTH = 96;
