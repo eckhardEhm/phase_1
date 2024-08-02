@@ -1,5 +1,8 @@
+// src/actor.js
+
 export class Actor {
-  constructor() {
+  constructor(name = "_unnamed_") {
+    this.name = name; // Name for easier identification
     this.components = [];
   }
 
@@ -30,6 +33,12 @@ export class Actor {
   // Get all components of a specific type
   getComponentsOfType(type) {
     return this.components.filter((component) => component instanceof type);
+  }
+
+  getComponent(type) {
+    return (
+      this.components.find((component) => component instanceof type) || null
+    );
   }
 
   // Clear all components

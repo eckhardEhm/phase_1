@@ -1,5 +1,3 @@
-// src/components/Battery.js
-
 import { Component } from "./Component.js"; // Ensure the path is correct
 import { BatteryUI } from "../ui/BatteryUI.js"; // Correctly import BatteryUI
 
@@ -26,12 +24,16 @@ export class Battery extends Component {
     // Initialize BatteryUI
     this.batteryUI = new BatteryUI(this, actor.sprite);
 
-    console.log("battery created for " + actor.name);
-    //console.log("battery has owner sprite " + actor["sprite"]);
+    console.log("Battery created for " + this.actor.name);
   }
 
   update() {
     this.rechargeSelf(); // Manage recharging and draining
+
+    // Provide power to nearby Battery components if generatePowerRate is > 0
+    if (this.generatePowerRate > 0) {
+      this.providePowerToNearbyComponents();
+    }
 
     // Update the battery UI if needed
     if (this.batteryUI) {
@@ -43,6 +45,46 @@ export class Battery extends Component {
     // Recharge power
     this.power += this.generatePowerRate;
     this.power = Math.min(this.power, this.maxPower); // Cap the power to the max capacity
+  }
+
+  providePowerToNearbyComponents() {
+    const nearbyComponents = this.getNearbyComponents();
+
+    nearbyComponents.forEach((component) => {
+      if (component !== this) {
+        // Avoid providing power to self
+        const distance = Phaser.Math.Distance.Between(
+          this.actor.sprite.x,
+          this.actor.sprite.y,
+          component.actor.sprite.x,
+          component.actor.sprite.y,
+        );
+
+        if (distance <= this.powerRange) {
+          // Provide power to nearby battery components
+          component.draw(this.generatePowerRate);
+        }
+      }
+    });
+  }
+
+  getNearbyComponents() {
+    const components = [];
+    const actorManager = this.actor.scene.actorManager; // Access the ActorManager instance
+
+    // Iterate through all actors in the ActorManager
+    for (const name in actorManager.actors) {
+      const actor = actorManager.actors[name];
+      if (actor instanceof Phaser.GameObjects.Sprite) {
+        // Ensure it's a sprite
+        const batteryComponent = actor.getComponent(Battery);
+        if (batteryComponent instanceof Battery) {
+          components.push(batteryComponent);
+        }
+      }
+    }
+
+    return components;
   }
 
   draw(rate) {
