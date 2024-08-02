@@ -17,14 +17,12 @@ export class MainScene extends Phaser.Scene {
     preloadAssets(this);
   }
 
-  create() {
+  createBackground() {
     // Create background and set its initial size
     this.background = this.add.image(0, 0, "background").setOrigin(0, 0);
-    this.resize(this.scale.width, this.scale.height); // Initial resize
+  }
 
-    // Initialize the ActorManager
-    this.actorManager = new ActorManager(this);
-
+  createDropPod() {
     // Calculate random offset for droppod
     const centerX = this.cameras.main.width / 2;
     const centerY = this.cameras.main.height / 2;
@@ -42,17 +40,31 @@ export class MainScene extends Phaser.Scene {
     droppod.preload();
     droppod.create();
     this.actorManager.addActor(droppod);
+  }
 
+  createPlayer() {
     // Create and add player actor
     const player = new Player(this);
     player.preload();
+    let centerX = this.cameras.main.width / 2;
+    let centerY = this.cameras.main.height / 2;
     player.create(centerX, centerY); // Spawn player at the center of the map
     this.actorManager.addActor(player);
+  }
+
+  create() {
+    // Initialize the ActorManager
+    this.actorManager = new ActorManager(this);
+
+    this.createBackground();
+    this.createDropPod();
+    this.createPlayer();
 
     // Handle window resize
     this.scale.on("resize", (gameSize) => {
       this.resize(gameSize.width, gameSize.height);
     });
+    this.resize(this.scale.width, this.scale.height); // Initial resize
   }
 
   update() {
