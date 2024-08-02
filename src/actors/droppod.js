@@ -1,16 +1,15 @@
 // src/actors/droppod.js
 import { Battery } from "../components/Battery.js"; // Ensure this is the correct path
-// import actor and extend it
-/*
+import { Actor } from "./Actor.js"; // Import the Actor class
 
-*/
 
 // Define droppod sprite size
 const DROPPOD_WIDTH = 96;
 const DROPPOD_HEIGHT = 96;
 
-export class Droppod {
+export class Droppod extends Actor {
   constructor(scene, x, y) {
+    super(); // Call the constructor of the Actor class
     this.scene = scene;
     this.sprite = null;
     this.x = x;
