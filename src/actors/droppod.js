@@ -1,5 +1,5 @@
 // src/actors/droppod.js
-import { Battery } from "../components/Battery.js"; // Ensure this is the correct path
+import { Battery } from "../components/battery.js"; // Ensure this is the correct path
 import { Actor } from "./Actor.js"; // Import the Actor class
 
 
@@ -8,12 +8,26 @@ const DROPPOD_WIDTH = 96;
 const DROPPOD_HEIGHT = 96;
 
 export class Droppod extends Actor {
-  constructor(scene, x, y) {
+  constructor(scene) {
     super(); // Call the constructor of the Actor class
     this.scene = scene;
     this.sprite = null;
-    this.x = x;
-    this.y = y;
+// Define the offset range for the droppod
+const DROPPOD_OFFSET_RANGE = 200; // Example range for random offset
+
+    // Calculate random offset for droppod
+    const centerX = this.scene.cameras.main.width / 2;
+    const centerY = this.scene.cameras.main.height / 2;
+    const minOffsetX = -DROPPOD_OFFSET_RANGE;
+    const maxOffsetX = DROPPOD_OFFSET_RANGE;
+    const offsetX = Math.random() * (maxOffsetX - minOffsetX) + minOffsetX;
+    const minOffsetY = -DROPPOD_OFFSET_RANGE;
+    const maxOffsetY = DROPPOD_OFFSET_RANGE;
+    const offsetY = Math.random() * (maxOffsetY - minOffsetY) + minOffsetY;
+
+
+    this.x = centerX + offsetX;
+    this.y = centerY + offsetY;
     this.name = "DropPod";
   }
 

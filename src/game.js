@@ -1,5 +1,17 @@
 import { MainScene } from "./mainScene.js";
 
+// Add this to your game.js file
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden") {
+    // Pause the game when visibility is hidden
+    game.paused = true;
+  } else {
+    // Resume the game when visibility is visible again
+    game.paused = false;
+  }
+  console.log("pause ? : "+game.paused)
+});
+
 // Create the Phaser game configuration
 const config = {
   type: Phaser.AUTO,

@@ -1,10 +1,10 @@
+// src/mainScene.js
+
 import { Player } from "./actors/player.js";
 import { Droppod } from "./actors/droppod.js";
 import { preloadAssets } from "./gameAssets.js";
 import { ActorManager } from "./actors/ActorManager.js"; // Import the ActorManager
-
-// Define the offset range for the droppod
-const DROPPOD_OFFSET_RANGE = 200; // Example range for random offset
+import { Mineral } from './actors/Mineral.js';
 
 export class MainScene extends Phaser.Scene {
   constructor() {
@@ -23,20 +23,9 @@ export class MainScene extends Phaser.Scene {
   }
 
   createDropPod() {
-    // Calculate random offset for droppod
-    const centerX = this.cameras.main.width / 2;
-    const centerY = this.cameras.main.height / 2;
-    const offsetX = Phaser.Math.Between(
-      -DROPPOD_OFFSET_RANGE,
-      DROPPOD_OFFSET_RANGE,
-    );
-    const offsetY = Phaser.Math.Between(
-      -DROPPOD_OFFSET_RANGE,
-      DROPPOD_OFFSET_RANGE,
-    );
 
     // Create and add droppod actor
-    const droppod = new Droppod(this, centerX + offsetX, centerY + offsetY);
+    const droppod = new Droppod(this);
     droppod.preload();
     droppod.create();
     this.actorManager.addActor(droppod);
@@ -59,6 +48,9 @@ export class MainScene extends Phaser.Scene {
     this.createBackground();
     this.createDropPod();
     this.createPlayer();
+
+    const mineral = new Mineral(this.scene.scene, 50, 50, 10, 'blue');
+    mineral.create(mineral.x,mineral.y);
 
     // Handle window resize
     this.scale.on("resize", (gameSize) => {
